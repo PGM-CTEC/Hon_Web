@@ -1,5 +1,4 @@
 package br.com.pgm.ctec.uhscope.modules.procuradores.dto;
-import java.time.LocalDate;
 import org.hibernate.validator.constraints.br.CPF;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -16,5 +15,5 @@ public class CreateProcuradorDTO {
     @Size(min=8,max=100)
     private String nome;
 
-    private LocalDate data_entrada; 
+    private String data_entrada; 
 }
