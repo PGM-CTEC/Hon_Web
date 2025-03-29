@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.pgm.ctec.uhscope.modules.procuradores.dto.CreateProcuradorDTO;
+import br.com.pgm.ctec.uhscope.modules.procuradores.dto.UpdateProcuradorDTO;
 import br.com.pgm.ctec.uhscope.modules.procuradores.entities.ProcuradorEntity;
 import br.com.pgm.ctec.uhscope.modules.utils.MethodsUtils;
 import jakarta.validation.ValidationException;
@@ -29,12 +30,12 @@ public class ProcuradorService  {
         String cpfFormatted = createProcuradorDTO.getCpf().replace(".", "").replace("-", "");
     
         // Verifica se a matrícula já existe
-        if (this.procuradorRepository.findById(createProcuradorDTO.getMatricula()).isPresent()) {
+        if (this.procuradorRepository.findById(createProcuradorDTO.getMatricula()).equals(cpfFormatted)) {
             throw new ValidationException("Matrícula já cadastrada. Não é possível sobrescrever.");
         }
     
         // Verifica se o CPF já existe no banco com o formato correto
-        if (this.procuradorRepository.findByCpf(cpfFormatted).isPresent()) {
+        if (this.procuradorRepository.findByCpf(cpfFormatted).equals(null)) {
             throw new ValidationException("CPF já cadastrado");
         }
     
@@ -53,8 +54,30 @@ public class ProcuradorService  {
         // Salva o procurador no repositório
         return this.procuradorRepository.save(procurador);
     }
-    
-    
-    
-    
+
+
+    public ProcuradorEntity update(UpdateProcuradorDTO updateProcuradorDTO, String matricula) throws ValidationException {
+        // Busca o procurador existente
+        ProcuradorEntity procurador = this.procuradorRepository.findByMatricula(matricula);
+        
+        // Se não encontrou, retorna null
+        if (procurador == null) {
+            return null;
+        }
+        
+        // Atualiza os campos fornecidos no DTO
+        if (updateProcuradorDTO.getNome() != null && !updateProcuradorDTO.getNome().isEmpty()) {
+            procurador.setNome(updateProcuradorDTO.getNome());
+        }
+        
+        if (updateProcuradorDTO.getData_entrada() != null && !updateProcuradorDTO.getData_entrada().isEmpty()) {
+            LocalDate dataConvertida = methodsUtils.convertDate(updateProcuradorDTO.getData_entrada());
+            if (dataConvertida == null) {
+                throw new ValidationException("Formato de data inválido. Use um formato válido como dd/MM/yyyy, MM/dd/yyyy ou yyyy-MM-dd.");
+            }
+            procurador.setData_entrada(dataConvertida);
+        }
+
+        return this.procuradorRepository.save(procurador);
+    }
 }
