@@ -30,31 +30,28 @@ public class ProcuradorService  {
         String cpfFormatted = createProcuradorDTO.getCpf().replace(".", "").replace("-", "");
     
         // Verifica se a matrícula já existe
-        if (this.procuradorRepository.findById(createProcuradorDTO.getMatricula()).equals(cpfFormatted)) {
+        if (this.procuradorRepository.existsById(createProcuradorDTO.getMatricula())) {
             throw new ValidationException("Matrícula já cadastrada. Não é possível sobrescrever.");
         }
     
-        // Verifica se o CPF já existe no banco com o formato correto
-        if (this.procuradorRepository.findByCpf(cpfFormatted).equals(null)) {
+        // Verifica se o CPF já existe no banco
+        if (this.procuradorRepository.findByCpf(cpfFormatted) != null) {
             throw new ValidationException("CPF já cadastrado");
         }
     
         ProcuradorEntity procurador = new ProcuradorEntity();
         procurador.setMatricula(createProcuradorDTO.getMatricula());
-        procurador.setCpf(cpfFormatted); // Já armazenamos o CPF formatado no banco
+        procurador.setCpf(cpfFormatted);
         procurador.setNome(createProcuradorDTO.getNome());
     
-        // Converte a data de entrada para o formato correto
         LocalDate dataConvertida = methodsUtils.convertDate(createProcuradorDTO.getData_entrada());
         if (dataConvertida == null) {
             throw new ValidationException("Formato de data inválido. Use um formato válido como dd/MM/yyyy, MM/dd/yyyy ou yyyy-MM-dd.");
         }
         procurador.setData_entrada(dataConvertida);
     
-        // Salva o procurador no repositório
         return this.procuradorRepository.save(procurador);
     }
-
 
     public ProcuradorEntity update(UpdateProcuradorDTO updateProcuradorDTO, String matricula) throws ValidationException {
         // Busca o procurador existente
