@@ -24,14 +24,19 @@ public class AfastamentoService {
     ProcuradorRepository procuradorRepository;
 
     public AfastamentoEntity create(CreateAfastamentoDTO createAfastamentoDTO, String matricula) throws ValidationException {
-    
     AfastamentoEntity afastamento = new AfastamentoEntity();
 
     LocalDate dataInicioConverted = methodsUtils.convertDate(createAfastamentoDTO.getDataInicio());
+    System.out.println(dataInicioConverted);
     LocalDate dataFimConverted = methodsUtils.convertDate(createAfastamentoDTO.getDataFim());
+    System.out.println(dataFimConverted);
 
     if (dataFimConverted.isBefore(dataInicioConverted)) {
         throw new ValidationException("A data de volta não pode ser anterior à data de início.");
+    }
+
+    if (dataFimConverted.isEqual(dataInicioConverted)) {
+        throw new ValidationException("A data de volta não pode ser igual à data de início.");
     }
 
     if (dataInicioConverted == null || dataFimConverted == null) {
