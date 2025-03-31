@@ -1,8 +1,11 @@
 package br.com.pgm.ctec.uhscope.modules.afastamento;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.pgm.ctec.uhscope.modules.afastamento.dto.CreateAfastamentoDTO;
 import br.com.pgm.ctec.uhscope.modules.afastamento.entities.AfastamentoEntity;
+import br.com.pgm.ctec.uhscope.modules.utils.Relatorio;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 
@@ -18,6 +22,16 @@ public class AfastamentoController {
     @Autowired
     AfastamentoService afastamentoService;
     
+    @GetMapping("/relatorio")
+    public ResponseEntity<?> getRelatorio(){
+        try {
+            ArrayList<Relatorio> relatorios = this.afastamentoService.getAllRelatorios();
+
+            return ResponseEntity.ok(relatorios);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(e.getMessage());
+        }
+    }
 
     @PostMapping("/afastamento/{matricula}")
     public ResponseEntity<?> create(@Valid @RequestBody CreateAfastamentoDTO createAfastamentoDTO, @Valid @PathVariable String matricula) {
@@ -29,4 +43,6 @@ public class AfastamentoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } 
     }
+
+    
 }

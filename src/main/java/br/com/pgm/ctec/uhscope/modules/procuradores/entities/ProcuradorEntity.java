@@ -1,5 +1,6 @@
 package br.com.pgm.ctec.uhscope.modules.procuradores.entities;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -34,6 +35,6 @@ public class ProcuradorEntity {
 
     @OneToMany(mappedBy = "procurador", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
-    private List<AfastamentoEntity> afastamentos;
+    private List<AfastamentoEntity> afastamentos = new ArrayList<>();
 
 }
