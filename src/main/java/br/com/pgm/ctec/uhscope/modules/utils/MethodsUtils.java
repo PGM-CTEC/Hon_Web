@@ -3,10 +3,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import br.com.pgm.ctec.uhscope.modules.afastamento.entities.AfastamentoEntity;
 import br.com.pgm.ctec.uhscope.modules.procuradores.entities.ProcuradorEntity;
+import ch.qos.logback.classic.Logger;
 import jakarta.validation.ValidationException;
 
 @Service
@@ -159,7 +162,10 @@ public class MethodsUtils {
 
     public double calculaUH(List<AfastamentoEntity> afastamentos, ProcuradorEntity procurador) {
 
+        Collections.sort(afastamentos, Comparator.comparing(AfastamentoEntity::getDataInicio));
         double uh = 0;
+        
+        // OK!
         if (afastamentos.isEmpty()) {
             LocalDate dataEntrada = procurador.getData_entrada();
             LocalDate today = LocalDate.now();
@@ -186,9 +192,9 @@ public class MethodsUtils {
                 int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, afastamentoDataInicio);
 
                 // Lógica para o primeiro afastamento
-                if (diffTempo > 10) {
+                if (diffTempo >= 10) {
                     uh = 1.0;
-                } else if (diffTempo <= 10) {
+                } else if (diffTempo < 10) {
                     uh += diffTempo / 10.0;
                 }
 
@@ -198,9 +204,9 @@ public class MethodsUtils {
                 diffTempo = (int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
 
                 // Ajustando `uh` com base no tempo de afastamento
-                if (diffTempo > 10) {
+                if (diffTempo >= 10) {
                     uh = 0;
-                } else if (diffTempo <= 10 && diffTempo > 0) {
+                } else if (diffTempo > 0 && diffTempo < 10) {
                     uh -= diffTempo / 10.0;
                 }
             } else {
@@ -214,9 +220,9 @@ public class MethodsUtils {
                 int diffTempo = (int) ChronoUnit.YEARS.between(dataInicioAfastamento2, dataFimAfastamentoAnterior);
 
                 // Ajustando `uh` com base na diferença de tempo entre o final do afastamento anterior e o início do atual
-                if (diffTempo > 10) {
+                if (diffTempo >= 10) {
                     uh = 1.0;
-                } else if (diffTempo <= 10 && diffTempo > 0) {
+                } else if (diffTempo > 0 && diffTempo < 10) {
                     double uhTemp = uh + diffTempo / 10.0;
                     if (uhTemp > 1) {
                         uh = 1;
@@ -231,9 +237,9 @@ public class MethodsUtils {
                 diffTempo = (int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
 
                 // Ajustando `uh` com base no tempo de afastamento
-                if (diffTempo > 10) {
+                if (diffTempo >= 10) {
                     uh = 0;
-                } else if (diffTempo <= 10 && diffTempo > 0) {
+                } else if (diffTempo > 0 && diffTempo < 10) {
                     double uhTemp = uh - diffTempo / 10.0;
                     if (uhTemp < 0) {
                         uh = 0;

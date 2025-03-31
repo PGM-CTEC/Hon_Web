@@ -44,5 +44,14 @@ public class AfastamentoController {
         } 
     }
 
+    @GetMapping("/afastamento/{matricula}")
+    public ResponseEntity<?> getAll(@PathVariable String matricula){
+        try {
+            ArrayList<AfastamentoEntity> afastamentos = this.afastamentoService.getAll(matricula);
+            return ResponseEntity.status(HttpStatus.OK).body(afastamentos);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
     
 }
