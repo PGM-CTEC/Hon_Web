@@ -9,7 +9,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import br.com.pgm.ctec.uhscope.modules.afastamento.entities.AfastamentoEntity;
 import br.com.pgm.ctec.uhscope.modules.procuradores.entities.ProcuradorEntity;
-import ch.qos.logback.classic.Logger;
 import jakarta.validation.ValidationException;
 
 @Service
@@ -164,7 +163,7 @@ public class MethodsUtils {
 
         Collections.sort(afastamentos, Comparator.comparing(AfastamentoEntity::getDataInicio));
         double uh = 0;
-        
+
         // OK!
         if (afastamentos.isEmpty()) {
             LocalDate dataEntrada = procurador.getData_entrada();
