@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import br.com.pgm.ctec.uhscope.exceptions.ProcuradorNotFoundException;
 import br.com.pgm.ctec.uhscope.modules.procuradores.dto.CreateProcuradorDTO;
 import br.com.pgm.ctec.uhscope.modules.procuradores.dto.UpdateProcuradorDTO;
 import br.com.pgm.ctec.uhscope.modules.procuradores.entities.ProcuradorEntity;
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 
 @RequestMapping("/procurador")
 @RestController
@@ -23,12 +25,6 @@ public class ProcuradorController {
     @Autowired
     ProcuradorService procuradorService;
 
-    @GetMapping("/hello")
-    public String ok(){
-        return "Ok!";
-    }
-
-    // Retorna todos os procuradores (fazer calculo de unidade honorária nesse controller)
     @GetMapping()
     public ResponseEntity<ArrayList<ProcuradorEntity>> getALL(){
         ArrayList<ProcuradorEntity> lista = this.procuradorService.getAll();
@@ -39,10 +35,9 @@ public class ProcuradorController {
     public ResponseEntity<?> create(@Valid @RequestBody CreateProcuradorDTO createProcuradorDTO) {
         try {
             ProcuradorEntity savedProcurador = this.procuradorService.create(createProcuradorDTO);
-            
             return ResponseEntity.status(HttpStatus.OK).body(savedProcurador);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+        } catch (ValidationException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
@@ -51,8 +46,10 @@ public class ProcuradorController {
         try {
             ProcuradorEntity savedProcurador = this.procuradorService.update(updateProcuradorDTO, matricula);
             return ResponseEntity.status(HttpStatus.OK).body(savedProcurador);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+        } catch (ValidationException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        } catch (ProcuradorNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 
@@ -62,9 +59,15 @@ public class ProcuradorController {
         try {
             ProcuradorEntity deletedProcurador = this.procuradorService.delete(matricula);
             return ResponseEntity.status(HttpStatus.OK).body(deletedProcurador);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
         }
+        catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        catch(ProcuradorNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } 
+        
+        
     }
-
 }
+
