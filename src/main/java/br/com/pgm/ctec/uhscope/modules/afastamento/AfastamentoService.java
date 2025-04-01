@@ -43,6 +43,13 @@ public class AfastamentoService {
         if (dataInicioConverted == null || dataFimConverted == null) {
             throw new ValidationException("Formato de data inválido. Use um formato válido como dd/MM/yyyy, MM/dd/yyyy ou yyyy-MM-dd.");
         }
+        
+        ArrayList<AfastamentoEntity> afastamentos = this.afastamentoRepository.getByProcurador_matricula(matricula);
+        for (AfastamentoEntity afast : afastamentos) {
+            if (afast.getDataInicio().isEqual(dataInicioConverted)) {
+                throw new ValidationException("Já existe um afastamento registrado com esta data de início.");
+            }
+        }
 
         // Buscar procurador pelo número de matrícula
         ProcuradorEntity procurador = procuradorRepository.findByMatricula(matricula);
