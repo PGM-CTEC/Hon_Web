@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +42,7 @@ public class ProcuradorController {
             
             return ResponseEntity.status(HttpStatus.OK).body(savedProcurador);
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 
@@ -51,7 +52,18 @@ public class ProcuradorController {
             ProcuradorEntity savedProcurador = this.procuradorService.update(updateProcuradorDTO, matricula);
             return ResponseEntity.status(HttpStatus.OK).body(savedProcurador);
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{matricula}")
+    public ResponseEntity<?> delete(@PathVariable String matricula)
+    {
+        try {
+            ProcuradorEntity deletedProcurador = this.procuradorService.delete(matricula);
+            return ResponseEntity.status(HttpStatus.OK).body(deletedProcurador);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import br.com.pgm.ctec.uhscope.modules.afastamento.AfastamentoRepository;
 import br.com.pgm.ctec.uhscope.modules.procuradores.dto.CreateProcuradorDTO;
 import br.com.pgm.ctec.uhscope.modules.procuradores.dto.UpdateProcuradorDTO;
 import br.com.pgm.ctec.uhscope.modules.procuradores.entities.ProcuradorEntity;
@@ -15,6 +17,9 @@ public class ProcuradorService  {
 
     @Autowired
     ProcuradorRepository procuradorRepository;
+
+    @Autowired
+    AfastamentoRepository afastamentoRepository;
 
     @Autowired
     MethodsUtils methodsUtils;
@@ -29,12 +34,10 @@ public class ProcuradorService  {
     public ProcuradorEntity create(CreateProcuradorDTO createProcuradorDTO) throws ValidationException {
         String cpfFormatted = createProcuradorDTO.getCpf().replace(".", "").replace("-", "");
     
-        // Verifica se a matrícula já existe
         if (this.procuradorRepository.existsById(createProcuradorDTO.getMatricula())) {
             throw new ValidationException("Matrícula já cadastrada. Não é possível sobrescrever.");
         }
     
-        // Verifica se o CPF já existe no banco
         if (this.procuradorRepository.findByCpf(cpfFormatted) != null) {
             throw new ValidationException("CPF já cadastrado");
         }
@@ -54,15 +57,12 @@ public class ProcuradorService  {
     }
 
     public ProcuradorEntity update(UpdateProcuradorDTO updateProcuradorDTO, String matricula) throws ValidationException {
-        // Busca o procurador existente
         ProcuradorEntity procurador = this.procuradorRepository.findByMatricula(matricula);
         
-        // Se não encontrou, retorna null
         if (procurador == null) {
-            return null;
+            throw new ValidationException("Procurador não existe!");
         }
         
-        // Atualiza os campos fornecidos no DTO
         if (updateProcuradorDTO.getNome() != null && !updateProcuradorDTO.getNome().isEmpty()) {
             procurador.setNome(updateProcuradorDTO.getNome());
         }
@@ -76,5 +76,27 @@ public class ProcuradorService  {
         }
 
         return this.procuradorRepository.save(procurador);
+    }
+
+    public ProcuradorEntity delete(String matricula) throws ValidationException {
+        
+        ProcuradorEntity procurador = this.procuradorRepository.findByMatricula(matricula);
+        if(procurador==null){
+            throw new ValidationException("Procurador não existe!");
+        }
+
+        if(procurador.getAfastamentos().isEmpty())
+        {
+            this.procuradorRepository.deleteByMatricula(matricula);
+            return procurador;
+        }
+
+        this.afastamentoRepository.deleteByProcurador_matricula(matricula);
+        this.procuradorRepository.deleteByMatricula(matricula);
+
+        return procurador;
+
+        
+       
     }
 }

@@ -56,8 +56,6 @@ public class AfastamentoService {
             }
         }
 
-
-
         // Buscar procurador pelo número de matrícula
         ProcuradorEntity procurador = procuradorRepository.findByMatricula(matricula);
 
