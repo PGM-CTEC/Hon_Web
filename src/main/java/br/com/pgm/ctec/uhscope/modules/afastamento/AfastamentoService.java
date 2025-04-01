@@ -49,7 +49,14 @@ public class AfastamentoService {
             if (afast.getDataInicio().isEqual(dataInicioConverted)) {
                 throw new ValidationException("Já existe um afastamento registrado com esta data de início.");
             }
+
+            else if ((dataInicioConverted.isAfter(afast.getDataInicio())) && ((dataInicioConverted.isBefore(afast.getDataFim()))))
+            {
+                throw new ValidationException("Já existe um afastamento registrado nesse intervalo.");
+            }
         }
+
+
 
         // Buscar procurador pelo número de matrícula
         ProcuradorEntity procurador = procuradorRepository.findByMatricula(matricula);
