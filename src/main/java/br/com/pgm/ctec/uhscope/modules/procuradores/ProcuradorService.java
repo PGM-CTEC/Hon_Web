@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.pgm.ctec.uhscope.modules.afastamento.AfastamentoRepository;
 import br.com.pgm.ctec.uhscope.modules.procuradores.dto.CreateProcuradorDTO;
@@ -56,6 +57,7 @@ public class ProcuradorService  {
         return this.procuradorRepository.save(procurador);
     }
 
+    @Transactional
     public ProcuradorEntity update(UpdateProcuradorDTO updateProcuradorDTO, String matricula) throws ValidationException {
         ProcuradorEntity procurador = this.procuradorRepository.findByMatricula(matricula);
         
@@ -78,6 +80,7 @@ public class ProcuradorService  {
         return this.procuradorRepository.save(procurador);
     }
 
+    @Transactional
     public ProcuradorEntity delete(String matricula) throws ValidationException {
         
         ProcuradorEntity procurador = this.procuradorRepository.findByMatricula(matricula);
@@ -85,7 +88,7 @@ public class ProcuradorService  {
             throw new ValidationException("Procurador não existe!");
         }
 
-        if(procurador.getAfastamentos().isEmpty())
+        else if(procurador.getAfastamentos().isEmpty())
         {
             this.procuradorRepository.deleteByMatricula(matricula);
             return procurador;
@@ -94,9 +97,7 @@ public class ProcuradorService  {
         this.afastamentoRepository.deleteByProcurador_matricula(matricula);
         this.procuradorRepository.deleteByMatricula(matricula);
 
-        return procurador;
-
-        
+        return procurador;    
        
     }
 }

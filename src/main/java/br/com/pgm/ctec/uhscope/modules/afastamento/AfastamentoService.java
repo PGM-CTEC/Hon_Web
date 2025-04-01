@@ -82,7 +82,7 @@ public class AfastamentoService {
         return afastamentos;
 
     }
-
+    
     public ArrayList<Relatorio> getAllRelatorios() {
         ArrayList<Relatorio> relatorios = new ArrayList<>();
         List<ProcuradorEntity> procuradores = this.procuradorRepository.findAll(); // Alterado para List
