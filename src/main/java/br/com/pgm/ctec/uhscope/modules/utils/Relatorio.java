@@ -7,4 +7,5 @@ public class Relatorio {
     private String nome;
     private String cpf;
     private double uh;
+    //private double valor;
 }
