@@ -1,5 +1,4 @@
 package br.com.pgm.ctec.uhscope.modules.relatorio;
-import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

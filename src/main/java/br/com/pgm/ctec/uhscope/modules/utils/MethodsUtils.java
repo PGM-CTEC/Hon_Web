@@ -107,45 +107,77 @@ public class MethodsUtils {
     
         if (afastamentos.isEmpty()) {
             LocalDate dataEntrada = procurador.getData_entrada();
-            int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataFimMes); 
+            System.out.println("\n\n\n");
+            System.out.println("Data entrada procurador: " + dataEntrada + " | Procurador: " + procurador.getNome());
+            int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataFimMes);
+            System.out.println("Tempo trabalhado por " + procurador.getNome() + " | Tempo: " + diffTempo);
             uh = Math.min(diffTempo / 10.0, 1.0);
+            System.out.println("Unidade Honorária de " + procurador.getNome() + "| " + "Uh: " + uh);
+            System.out.println("\n");
             return Math.max(0.0, new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue());
         }
-    
+        AfastamentoEntity ultimoAfastamento = afastamentos.get(afastamentos.size() - 1);;
         for (int i = 0; i < afastamentos.size(); i++) {
             AfastamentoEntity afastamento = afastamentos.get(i);
             LocalDate dataInicioAfastamento = afastamento.getDataInicio();
             LocalDate dataFimAfastamento = afastamento.getDataFim();
-    
-            // Se a data de afastamento não estiver no período do mês solicitado, ignore
-            if (dataFimAfastamento.isBefore(dataInicioMes) || dataInicioAfastamento.isAfter(dataFimMes)) {
-                continue;
-            }
+            
+            // Se o afastamento começa antes do fim do mês e termina depois, ajusta a data de fim para o último dia do mês
     
             if (i == 0) {
                 LocalDate dataEntrada = procurador.getData_entrada();
-                int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento);
-                uh = Math.min(diffTempo / 10.0, 1.0);
+                if(dataInicioAfastamento.isAfter(dataFimMes))
+                {
+                    int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataFimMes);
+                    uh = Math.min(diffTempo / 10.0, 1.0);
+                    break;
+                }
+                
+                if (dataInicioAfastamento.isBefore(dataFimMes) && dataFimAfastamento.isAfter(dataFimMes)) {
+                    dataFimAfastamento = dataFimMes;
+                    ultimoAfastamento = afastamentos.get(i);
+                    int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataFimMes);
+                    uh = Math.min(diffTempo / 10.0, 1.0);
+                    break;
+                }
+                else {
+                    int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento);
+                    uh = Math.min(diffTempo / 10.0, 1.0);
+                }
+                
             } else {
                 AfastamentoEntity afastamentoAnterior = afastamentos.get(i - 1);
                 LocalDate dataFimAfastamentoAnterior = afastamentoAnterior.getDataFim();
+                if (dataInicioAfastamento.isBefore(dataFimMes) && dataFimAfastamento.isAfter(dataFimMes)) {
+                    dataFimAfastamento = dataFimMes;
+                    ultimoAfastamento = afastamentos.get(i);
+                    int diffTempo = (int) ChronoUnit.YEARS.between(dataFimAfastamentoAnterior, dataInicioAfastamento);
+                    uh = Math.min(diffTempo / 10.0, 1.0);
+                    break;
+                }
                 int diffTempo = (int) ChronoUnit.YEARS.between(dataFimAfastamentoAnterior, dataInicioAfastamento);
                 uh = Math.min(uh + diffTempo / 10.0, 1.0);
             }
     
-            int diffAfastamento = (int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
-            uh = Math.max(uh - diffAfastamento / 10.0, 0.0);
+            // Calcular o tempo de afastamento que realmente ocorreu dentro do mês
+            int diffAfastamento = (int) ChronoUnit.DAYS.between(dataInicioAfastamento, dataFimAfastamento); // Em dias
+            uh = Math.max(uh - diffAfastamento / 365.0 / 10.0, 0.0);
         }
     
-        // Considerar período final até o final do mês escolhido
-        AfastamentoEntity ultimoAfastamento = afastamentos.get(afastamentos.size() - 1);
-        LocalDate lastDate = ultimoAfastamento.getDataFim();
-        int diffFinal = (int) ChronoUnit.YEARS.between(lastDate, dataFimMes);
+        LocalDate lastDateFim = ultimoAfastamento.getDataFim();
+    
+        // Se o último afastamento terminar depois do fim do mês, ajusta a data final para o mês
+        if (lastDateFim.isAfter(dataFimMes)) {
+            lastDateFim = dataFimMes;
+        }
+    
+        int diffFinal = (int) ChronoUnit.YEARS.between(lastDateFim, dataFimMes);
         uh = Math.min(uh + diffFinal / 10.0, 1.0);
     
-        // Garantir que uh nunca seja negativo
+        // Garantir que UH nunca seja negativo
         return Math.max(0.0, new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue());
     }
+    
     
 
 }
