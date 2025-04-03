@@ -2,6 +2,7 @@ package br.com.pgm.ctec.uhscope.modules.utils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
@@ -97,24 +98,31 @@ public class MethodsUtils {
 
     
     public double calculaUHMensal(List<AfastamentoEntity> afastamentos, ProcuradorEntity procurador, int mes, int ano) {
+        // Definir o intervalo fixo do mês escolhido
+        LocalDate dataInicioMes = LocalDate.of(ano, mes, 1);
+        LocalDate dataFimMes = YearMonth.of(ano, mes).atEndOfMonth();
+    
         Collections.sort(afastamentos, Comparator.comparing(AfastamentoEntity::getDataInicio));
         double uh = 0;
-
+    
         if (afastamentos.isEmpty()) {
             LocalDate dataEntrada = procurador.getData_entrada();
-            LocalDate today = LocalDate.now();
-            int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, today);
-            uh = diffTempo / 10.0;
-            uh = Math.min(uh, 1.0);
-            return new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue();
+            int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataFimMes); 
+            uh = Math.min(diffTempo / 10.0, 1.0);
+            return Math.max(0.0, new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue());
         }
-
-        for (int i=0; i < afastamentos.size(); i++) {
+    
+        for (int i = 0; i < afastamentos.size(); i++) {
             AfastamentoEntity afastamento = afastamentos.get(i);
             LocalDate dataInicioAfastamento = afastamento.getDataInicio();
             LocalDate dataFimAfastamento = afastamento.getDataFim();
-
-            if (i==0) {
+    
+            // Se a data de afastamento não estiver no período do mês solicitado, ignore
+            if (dataFimAfastamento.isBefore(dataInicioMes) || dataInicioAfastamento.isAfter(dataFimMes)) {
+                continue;
+            }
+    
+            if (i == 0) {
                 LocalDate dataEntrada = procurador.getData_entrada();
                 int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento);
                 uh = Math.min(diffTempo / 10.0, 1.0);
@@ -124,19 +132,20 @@ public class MethodsUtils {
                 int diffTempo = (int) ChronoUnit.YEARS.between(dataFimAfastamentoAnterior, dataInicioAfastamento);
                 uh = Math.min(uh + diffTempo / 10.0, 1.0);
             }
-
+    
             int diffAfastamento = (int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
             uh = Math.max(uh - diffAfastamento / 10.0, 0.0);
         }
-
+    
+        // Considerar período final até o final do mês escolhido
         AfastamentoEntity ultimoAfastamento = afastamentos.get(afastamentos.size() - 1);
         LocalDate lastDate = ultimoAfastamento.getDataFim();
-        LocalDate today = LocalDate.now();
-        int diffFinal = (int) ChronoUnit.YEARS.between(lastDate, today);
+        int diffFinal = (int) ChronoUnit.YEARS.between(lastDate, dataFimMes);
         uh = Math.min(uh + diffFinal / 10.0, 1.0);
-
-        return new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue();
+    
+        // Garantir que uh nunca seja negativo
+        return Math.max(0.0, new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue());
     }
-
+    
 
 }
