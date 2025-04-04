@@ -35,26 +35,43 @@ public class RelatorioService {
         if (ano < 1900 || ano > anoAtual) {
             throw new ValidationException("Ano inválido! Insira um ano entre 1900 e " + anoAtual + ".");
         }
-
+    
         String dataInicio = String.format("%02d/%02d/%d", 1, mes, ano);
         String dataFim = String.format("%02d/%02d/%d", LocalDate.of(ano, mes, 1).lengthOfMonth(), mes, ano);
-
+    
         ArrayList<ProcuradorEntity> procuradores = (ArrayList<ProcuradorEntity>) this.procuradorRepository.findAll();
         StringBuilder resultado = new StringBuilder();
-
+    
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
         symbols.setDecimalSeparator(',');
         DecimalFormat df = new DecimalFormat("00000.00", symbols);
-
+    
+        double somaUh = 0; // Variável para armazenar a soma de todas as UHs
+        List<Double> uhs = new ArrayList<>();
+    
+        // Calcular as UHs de todos os procuradores e somá-las
         for (ProcuradorEntity procurador : procuradores) {
             List<AfastamentoEntity> afastamentos = new ArrayList<>(procurador.getAfastamentos());
-
+    
             double uh = this.methodsUtils.calculaUHMensal(afastamentos, procurador, mes, ano);
-            System.out.println("\n");
-            System.out.println("Procurador: " + procurador.getMatricula() + " - UH: " + uh);
-            System.out.println("\n");
-            double valorFinal = (uh / 100) * valor;
-
+            uhs.add(uh); // Adicionar UH de cada procurador à lista
+            somaUh += uh; // Somar a UH ao total
+        }
+    
+        // Verificar se a soma total das UHs é válida (evitar divisão por zero)
+        if (somaUh == 0) {
+            throw new ValidationException("A soma das UHs é zero. Não é possível calcular os valores.");
+        }
+    
+        // Calcular o valor final para cada procurador com base na sua UH e na soma total das UHs
+        for (int i = 0; i < procuradores.size(); i++) {
+            ProcuradorEntity procurador = procuradores.get(i);
+            double uh = uhs.get(i); // UH do procurador atual
+    
+            // Calcular o valor final do procurador
+            double valorFinal = (uh / somaUh) * valor;
+    
+            // Formatar o resultado e adicionar ao StringBuilder
             resultado.append(String.format("%s;HON SUCUMBENCIA;%s;%s;%s\n",
                     procurador.getMatricula(),
                     dataInicio,
@@ -62,9 +79,11 @@ public class RelatorioService {
                     df.format(valorFinal)
             ));
         }
-
+    
+        // Retornar o resultado final
         return resultado.toString();
     }
+    
     
 }
 

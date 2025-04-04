@@ -24,7 +24,7 @@ public class AfastamentoController {
     @GetMapping("/relatorio")
     public ResponseEntity<?> getRelatorio(){
         try {
-            ArrayList<Relatorio> relatorios = this.afastamentoService.getRelatorio();
+            ArrayList<Relatorio> relatorios = this.afastamentoService.getAllRelatorios();
             return ResponseEntity.ok(relatorios);
         } catch (ValidationException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
