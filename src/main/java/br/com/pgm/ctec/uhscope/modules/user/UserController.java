@@ -1,4 +1,4 @@
-package br.com.pgm.ctec.uhscope.modules.user.entities;
+package br.com.pgm.ctec.uhscope.modules.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.pgm.ctec.uhscope.modules.auth.dto.LoginDTO;
 import br.com.pgm.ctec.uhscope.modules.auth.dto.RegisterDTO;
+import br.com.pgm.ctec.uhscope.modules.user.entities.UserEntity;
 
 @RestController
 public class UserController {

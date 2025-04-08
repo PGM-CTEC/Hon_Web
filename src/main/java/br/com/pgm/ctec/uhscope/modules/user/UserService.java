@@ -1,4 +1,4 @@
-package br.com.pgm.ctec.uhscope.modules.user.entities;
+package br.com.pgm.ctec.uhscope.modules.user;
 import java.time.Instant;
 import java.time.Duration;
 import java.util.Optional;
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import br.com.pgm.ctec.uhscope.modules.auth.UserRepository;
+import br.com.pgm.ctec.uhscope.modules.user.entities.UserEntity;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 
