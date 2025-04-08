@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "afastamento") // Define explicitamente o nome da tabela
+@Table(name = "afastamento")
 @Data
 public class AfastamentoEntity {
 
