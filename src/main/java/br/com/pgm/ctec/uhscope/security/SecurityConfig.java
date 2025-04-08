@@ -23,15 +23,11 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
 
-            .addFilterBefore(securityFilter, BasicAuthenticationFilter.class)
-            ;
-            // .formLogin(form -> form.disable()) 
-            // .httpBasic(httpBasic -> httpBasic.disable()); 
+            .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
 
         return http.build();
     }
 
-    
     @Bean 
     public PasswordEncoder passwordEncoder()
     {
