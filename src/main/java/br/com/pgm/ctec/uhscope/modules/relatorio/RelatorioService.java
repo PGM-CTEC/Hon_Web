@@ -54,8 +54,15 @@ public class RelatorioService {
             List<AfastamentoEntity> afastamentos = new ArrayList<>(procurador.getAfastamentos());
     
             double uh = this.methodsUtils.calculaUHMensal(afastamentos, procurador, mes, ano);
+            if (uh<0) {
+                uh=0;
+            }
             uhs.add(uh); // Adicionar UH de cada procurador à lista
             somaUh += uh; // Somar a UH ao total
+
+            System.out.println("\n");
+            System.out.println("Procurador: "+procurador.getNome()+" | "+"UH: "+uh);
+            System.out.println("\n");
         }
     
         // Verificar se a soma total das UHs é válida (evitar divisão por zero)

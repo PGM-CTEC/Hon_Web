@@ -42,7 +42,7 @@ public class AfastamentoController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (ProcuradorNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }    
+        }
     }
 
     @GetMapping("/afastamento/{matricula}")

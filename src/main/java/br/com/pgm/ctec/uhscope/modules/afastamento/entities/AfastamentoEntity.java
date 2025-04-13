@@ -5,9 +5,12 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.pgm.ctec.uhscope.modules.afastamento.enums.AfastamentoTipo;
 import br.com.pgm.ctec.uhscope.modules.procuradores.entities.ProcuradorEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,6 +37,10 @@ public class AfastamentoEntity {
 
     @Column(name = "uh_afastamento", nullable = false)
     private double uhAfastamento;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="tipo", nullable=false)
+    private AfastamentoTipo tipo;  
 
     @ManyToOne
     @JsonIgnore 

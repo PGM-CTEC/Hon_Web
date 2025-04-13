@@ -15,7 +15,7 @@ import br.com.pgm.ctec.uhscope.modules.procuradores.entities.ProcuradorEntity;
 import jakarta.validation.ValidationException;
 
 @Service
-public class MethodsUtils {
+public class MethodsUtilsBackup{
 
     public LocalDate convertDate(String dateString) throws ValidationException {
         if (dateString == null || dateString.trim().isEmpty()) {

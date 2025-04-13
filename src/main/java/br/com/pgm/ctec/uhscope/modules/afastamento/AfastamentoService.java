@@ -56,6 +56,11 @@ public class AfastamentoService {
             }
         }
 
+        if(createAfastamentoDTO.getTipo()==null)
+        {
+            throw new ValidationException("O tipo do afastamento é obrigatório.");
+        }
+
         // Buscar procurador pelo número de matrícula
         ProcuradorEntity procurador = procuradorRepository.findByMatricula(matricula);
 
@@ -72,6 +77,7 @@ public class AfastamentoService {
         afastamento.setDataFim(dataFimConverted);
         afastamento.setUhAfastamento(anosDeDiferenca);
         afastamento.setProcurador(procurador); // Definir o procurador
+        afastamento.setTipo(createAfastamentoDTO.getTipo());
 
         return this.afastamentoRepository.save(afastamento);
     }
@@ -89,6 +95,10 @@ public class AfastamentoService {
         for (ProcuradorEntity procurador : procuradores) {
             List<AfastamentoEntity> afastamentos = new ArrayList<>(procurador.getAfastamentos());
             double uh = this.methodsUtils.calculaUH(afastamentos, procurador);
+
+            System.out.println("\n");
+            System.out.println("Procurador: "+procurador.getNome()+" | "+"UH: "+uh);
+            System.out.println("\n");
            
             Relatorio relatorio = new Relatorio();
             
