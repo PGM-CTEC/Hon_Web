@@ -15,7 +15,7 @@ import br.com.pgm.ctec.uhscope.modules.procuradores.entities.ProcuradorEntity;
 import jakarta.validation.ValidationException;
 
 @Service
-public class MethodsUtils {
+public class MethodsUtilsAtivo {
 
     public LocalDate convertDate(String dateString) throws ValidationException {
         if (dateString == null || dateString.trim().isEmpty()) {
@@ -107,13 +107,8 @@ public class MethodsUtils {
     
         // Se a lista de afastamentos estiver vazia, trate isso
         if (afastamentos.isEmpty()) {
-            System.out.println("\n\n\n");
-            System.out.println("Data entrada procurador: " + dataEntrada + " | Procurador: " + procurador.getNome());
             int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataFimMes);
-            System.out.println("Tempo trabalhado por " + procurador.getNome() + " | Tempo: " + diffTempo);
             uh = Math.min(diffTempo / 10.0, 1.0);
-            System.out.println("Unidade Honorária de " + procurador.getNome() + "| " + "Uh: " + uh);
-            System.out.println("\n");
             return Math.max(0.0, new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue());
         }
     
@@ -123,56 +118,7 @@ public class MethodsUtils {
             AfastamentoEntity afastamento = afastamentos.get(i); //Afastamento
             LocalDate dataInicioAfastamento = afastamento.getDataInicio(); //Data inicio do afastamento
             LocalDate dataFimAfastamento = afastamento.getDataFim(); //Data fim do afastamento
-
-            if(afastamento.getTipo().equals("INATIVO")) {
-                if(i==0)
-                {
-                    if(afastamento.getDataInicio().isAfter(dataFimMes))
-                    {
-                        int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataFimMes);
-                        uh = Math.min(diffTempo / 10.0, 1.0);
-                        return new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue(); 
-                    }
-                    else if(afastamento.getDataInicio().isBefore(dataFimMes)&&afastamento.getDataFim().isAfter(dataFimMes))
-                    {
-                        int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento)-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimMes);
-                        uh = Math.min(diffTempo / 10.0, 1.0);
-                        return new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue();
-                    }
-                    else {
-                        int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento)-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
-                        ultimoAfastamento = afastamentos.get(i);
-                        uh = Math.min(diffTempo / 10.0, 1.0);
-                        continue;
-                    }
-                }
-                else {
-                    AfastamentoEntity afastamentoAnterior = afastamentos.get(i-1);
-                    LocalDate fimAfastamentoAnterior = afastamentoAnterior.getDataFim();
-
-                    if(afastamento.getDataInicio().isAfter(dataFimMes))
-                    {
-                        int diffTempo = (int) ChronoUnit.YEARS.between(fimAfastamentoAnterior, dataFimMes);
-                        uh = Math.min(uh + diffTempo / 10.0, 1.0);
-                        return new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue();
-                    }
-                    else if(afastamento.getDataInicio().isBefore(dataFimMes)&&afastamento.getDataFim().isAfter(dataFimMes))
-                    {
-                        int diffTempo = (int) ChronoUnit.YEARS.between(fimAfastamentoAnterior, dataInicioAfastamento)-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimMes);
-                        uh = Math.min(uh + diffTempo / 10.0, 1.0);
-                        return new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue();
-                    }
-                    else {
-                        int diffTempo = (int) ChronoUnit.YEARS.between(fimAfastamentoAnterior, dataInicioAfastamento)-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
-                        ultimoAfastamento = afastamentos.get(i);
-                        uh = Math.min(uh + diffTempo / 10.0, 1.0);
-                        continue;
-                    }
-                }
-            }
-
-            else if(afastamento.getTipo().equals("ATIVO"))
-            {
+            //afastamento.getTipo().equals("ATIVO")
                 if(i==0)
                 {
                     if(afastamento.getDataInicio().isAfter(dataFimMes))
@@ -238,14 +184,11 @@ public class MethodsUtils {
                         continue;
                     }
                 }
-            }
-    }
-
+        }
         LocalDate lastDate = ultimoAfastamento.getDataFim();
         int diffFinal = (int) ChronoUnit.YEARS.between(lastDate, dataFimMes);
         uh = Math.min(uh + diffFinal / 10.0, 1.0);
         return new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue();
-
     }
 
     public boolean passouUmAno(AfastamentoEntity afastamento, LocalDate dataEntrada)
