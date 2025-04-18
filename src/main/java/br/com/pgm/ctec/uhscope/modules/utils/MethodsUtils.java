@@ -118,13 +118,15 @@ public class MethodsUtils {
         }
     
         AfastamentoEntity ultimoAfastamento = afastamentos.get(afastamentos.size() - 1);
-    
+        
         for (int i = 0; i < afastamentos.size(); i++) {
             AfastamentoEntity afastamento = afastamentos.get(i); //Afastamento
             LocalDate dataInicioAfastamento = afastamento.getDataInicio(); //Data inicio do afastamento
             LocalDate dataFimAfastamento = afastamento.getDataFim(); //Data fim do afastamento
+            String afastamentoTipo = (String)afastamento.getTipo().name();
 
-            if(afastamento.getTipo().equals("INATIVO")) {
+            if(afastamentoTipo.equals("INATIVO")) {
+                
                 if(i==0)
                 {
                     if(afastamento.getDataInicio().isAfter(dataFimMes))
@@ -147,6 +149,7 @@ public class MethodsUtils {
                     }
                 }
                 else {
+                    System.out.println("resultado "+ afastamentos.get(i).getTipo().equals("INATIVO"));
                     AfastamentoEntity afastamentoAnterior = afastamentos.get(i-1);
                     LocalDate fimAfastamentoAnterior = afastamentoAnterior.getDataFim();
 
@@ -171,7 +174,7 @@ public class MethodsUtils {
                 }
             }
 
-            else if(afastamento.getTipo().equals("ATIVO"))
+            else if(afastamentoTipo.equals("ATIVO"))
             {
                 if(i==0)
                 {
