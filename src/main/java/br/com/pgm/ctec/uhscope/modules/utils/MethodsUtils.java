@@ -137,19 +137,23 @@ public class MethodsUtils {
                     }
                     else if(afastamento.getDataInicio().isBefore(dataFimMes)&&afastamento.getDataFim().isAfter(dataFimMes))
                     {
-                        int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento)-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimMes);
+                        int tempoTrab = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento);
+                        if(tempoTrab>=10) tempoTrab=10;
+                        int diffTempo = tempoTrab-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimMes);
+                        System.out.println(diffTempo);
                         uh = Math.min(diffTempo / 10.0, 1.0);
                         return new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue();
                     }
                     else {
-                        int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento)-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
+                        int tempoTrab = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento);
+                        if(tempoTrab>=10) tempoTrab=10;
+                        int diffTempo = tempoTrab-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
                         ultimoAfastamento = afastamentos.get(i);
                         uh = Math.min(diffTempo / 10.0, 1.0);
                         continue;
                     }
                 }
                 else {
-                    System.out.println("resultado "+ afastamentos.get(i).getTipo().equals("INATIVO"));
                     AfastamentoEntity afastamentoAnterior = afastamentos.get(i-1);
                     LocalDate fimAfastamentoAnterior = afastamentoAnterior.getDataFim();
 
@@ -161,12 +165,16 @@ public class MethodsUtils {
                     }
                     else if(afastamento.getDataInicio().isBefore(dataFimMes)&&afastamento.getDataFim().isAfter(dataFimMes))
                     {
-                        int diffTempo = (int) ChronoUnit.YEARS.between(fimAfastamentoAnterior, dataInicioAfastamento)-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimMes);
+                        int tempoTrab = (int) ChronoUnit.YEARS.between(fimAfastamentoAnterior, dataInicioAfastamento);
+                        if(tempoTrab>=10) tempoTrab=10;
+                        int diffTempo = tempoTrab-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimMes);
                         uh = Math.min(uh + diffTempo / 10.0, 1.0);
                         return new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue();
                     }
                     else {
-                        int diffTempo = (int) ChronoUnit.YEARS.between(fimAfastamentoAnterior, dataInicioAfastamento)-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
+                        int tempoTrab = (int) ChronoUnit.YEARS.between(fimAfastamentoAnterior, dataInicioAfastamento);
+                        if(tempoTrab>=10) tempoTrab=10;
+                        int diffTempo = tempoTrab-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
                         ultimoAfastamento = afastamentos.get(i);
                         uh = Math.min(uh + diffTempo / 10.0, 1.0);
                         continue;
@@ -193,8 +201,11 @@ public class MethodsUtils {
                         if(this.passouUmAno(afastamentoNovo, dataEntrada)){
                             uh+=0.1;
                         }
+                        if(uh>=1.0) uh=1.0;
+                        int tempoTrab = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento);
+                        if(tempoTrab>=10) tempoTrab=10;
 
-                        int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento)-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimMes);
+                        int diffTempo = tempoTrab-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimMes);
                         uh = Math.min(uh+diffTempo / 10.0, 1.0);
                         return new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue();
                     }
@@ -203,7 +214,12 @@ public class MethodsUtils {
                         if(this.passouUmAno(afastamento, dataEntrada)){
                             uh+=0.1;
                         }
-                        int diffTempo = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento)-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
+
+                        if(uh>=1.0) uh=1.0;
+                        int tempoTrab = (int) ChronoUnit.YEARS.between(dataEntrada, dataInicioAfastamento);
+                        if(tempoTrab>=10) tempoTrab=10;
+
+                        int diffTempo = tempoTrab-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
                         ultimoAfastamento = afastamentos.get(i);
                         uh = Math.min(uh+diffTempo / 10.0, 1.0);
                         continue;
@@ -227,7 +243,12 @@ public class MethodsUtils {
                         if(this.passouUmAno(afastamentoNovo, dataEntrada)){
                             uh+=0.1;
                         }
-                        int diffTempo = (int) ChronoUnit.YEARS.between(fimAfastamentoAnterior, dataInicioAfastamento)-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimMes);
+                        if(uh>=1.0) uh=1.0;
+
+                        int tempoTrab = (int) ChronoUnit.YEARS.between(fimAfastamentoAnterior, dataInicioAfastamento);
+                        if(tempoTrab>=10) tempoTrab=10;
+
+                        int diffTempo = tempoTrab-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimMes);
                         uh = Math.min(uh + diffTempo / 10.0, 1.0);
                         return new BigDecimal(uh).setScale(1, RoundingMode.HALF_UP).doubleValue();
                     }
@@ -235,7 +256,12 @@ public class MethodsUtils {
                         if(this.passouUmAno(afastamento, dataEntrada)){
                             uh+=0.1;
                         }
-                        int diffTempo = (int) ChronoUnit.YEARS.between(fimAfastamentoAnterior, dataInicioAfastamento)-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
+                        if(uh>=1.0) uh=1.0;
+
+                        int tempoTrab = (int) ChronoUnit.YEARS.between(fimAfastamentoAnterior, dataInicioAfastamento);
+                        if(tempoTrab>=10) tempoTrab=10;
+
+                        int diffTempo = tempoTrab-(int) ChronoUnit.YEARS.between(dataInicioAfastamento, dataFimAfastamento);
                         ultimoAfastamento = afastamentos.get(i);
                         uh = Math.min(uh + diffTempo / 10.0, 1.0);
                         continue;
