@@ -8,12 +8,42 @@
 </head>
 <body>
   <script>
-        const token = localStorage.getItem("token");
-        if (!token) {
-            // Se não houver token, redireciona pro login
-            window.location.href = "../pages/login.html";
+    async function validarToken() {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        window.location.href = "../pages/login.html";
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:8080/auth/validate?token=${token}`, {
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("Token inválido");
         }
+
+        const valido = await response.json();
+        if (!valido) {
+          window.location.href = "../pages/login.html";
+        }
+
+        // ✅ Token válido - não faz nada, segue renderizando a página
+
+      } catch (err) {
+        console.error("Erro ao validar token:", err);
+        window.location.href = "../pages/login.html";
+      }
+    }
+    validarToken();
   </script>
+
+
   <div id="sidebar-container"></div>
   <div class="main">
     <div id="topbar-container"></div>

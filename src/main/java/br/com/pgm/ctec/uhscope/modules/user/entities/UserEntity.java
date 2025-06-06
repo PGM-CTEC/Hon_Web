@@ -28,4 +28,7 @@ public class UserEntity {
     @Size(min=8)
     @Column(name="password", nullable = false)
     public String password;
+
+    @Column(name="cpf", unique = true, nullable = false, length = 11)
+    private String cpf;  // Ex: 123.456.789-00
 }

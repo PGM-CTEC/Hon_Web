@@ -98,7 +98,7 @@ public class MethodsUtils {
 
     public double calculaUHMensal(List<AfastamentoEntity> afastamentos, ProcuradorEntity procurador, int mes, int ano) {
         // Definir o intervalo fixo do mês escolhido
-        LocalDate dataInicioMes = LocalDate.of(ano, mes, 1);
+        LocalDate dataInicioMes = LocalDate.of(ano, mes, 1); // NÃO ESTÁ SENDO UTILIZADO (POR ALGUM MOTIVO...)
         LocalDate dataFimMes = YearMonth.of(ano, mes).atEndOfMonth();
     
         Collections.sort(afastamentos, Comparator.comparing(AfastamentoEntity::getDataInicio));

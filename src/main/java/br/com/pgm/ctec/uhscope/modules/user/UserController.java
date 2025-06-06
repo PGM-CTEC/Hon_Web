@@ -21,7 +21,7 @@ public class UserController {
     public ResponseEntity<?> register (@RequestBody RegisterDTO registerDTO)
     {
         try {
-            UserEntity user = this.userService.create(registerDTO.getEmail(), registerDTO.getPassword(), registerDTO.getUsername());
+            UserEntity user = this.userService.create(registerDTO.getEmail(), registerDTO.getPassword(), registerDTO.getUsername(), registerDTO.getCpf());
             return ResponseEntity.status(HttpStatus.OK).body(user);
         } catch (Exception e) {
             System.out.println(e.getMessage());

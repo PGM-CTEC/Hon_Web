@@ -25,22 +25,24 @@ public class UserService {
     @Value("${security.token.secret}")
     String secret;
     @Transactional
-    public UserEntity create(String email, String password, String username) throws ValidationException{
+    public UserEntity create(String email, String password, String username, String cpf) throws ValidationException {
 
-        if (this.userRepository.findByUsername(username).isPresent() || this.userRepository.findByEmail(email).isPresent()) {
-        throw new ValidationException("Usuário já existente!");
+        if (this.userRepository.findByUsername(username).isPresent()
+        || this.userRepository.findByEmail(email).isPresent()
+        || this.userRepository.findByCpf(cpf).isPresent()) {
+            throw new ValidationException("Usuário já existente!");
         }
 
         UserEntity user = new UserEntity();
         user.setEmail(email);
-
-        String passwordEncoded = this.passwordEncoder.encode(password);
-        user.setPassword(passwordEncoded);
         user.setUsername(username);
-        this.userRepository.save(user);
+        user.setCpf(cpf);
+        user.setPassword(this.passwordEncoder.encode(password));
 
+        this.userRepository.save(user);
         return user;
     }
+
 
     @Transactional
     public String login(String username, String password) throws ValidationException{
@@ -60,7 +62,7 @@ public class UserService {
         Algorithm algorithm = Algorithm.HMAC256(secret);
         String token = JWT.create().withIssuer("pgm")
         .withExpiresAt(Instant.now().plus(Duration.ofHours(1)))
-        .withSubject(username)
+        .withSubject(user.getCpf())
         .sign(algorithm);
     
         return token;
