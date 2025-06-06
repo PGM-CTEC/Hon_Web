@@ -1,61 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Home - UHscope</title>
-  <link rel="stylesheet" href="../assets/css/home.css">
+  <link rel="stylesheet" href="../assets/css/home.css" />
 </head>
 <body>
-  <script>
-    async function validarToken() {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        window.location.href = "../pages/login.html";
-        return;
-      }
-
-      try {
-        const response = await fetch(`http://localhost:8080/auth/validate?token=${token}`, {
-          method: "GET",
-          headers: {
-            "Authorization": "Bearer " + token
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error("Token inválido");
-        }
-
-        const valido = await response.json();
-        if (!valido) {
-          window.location.href = "../pages/login.html";
-        }
-
-        // ✅ Token válido - não faz nada, segue renderizando a página
-
-      } catch (err) {
-        console.error("Erro ao validar token:", err);
-        window.location.href = "../pages/login.html";
-      }
-    }
-    validarToken();
-  </script>
-
-
   <div id="sidebar-container"></div>
   <div class="main">
     <div id="topbar-container"></div>
-
     <div class="content">
       <h2>Procuradores</h2>
-
       <div class="buttons">
         <button>Gerar Arquivo</button>
         <button>Adicionar</button>
       </div>
-
       <table>
         <thead>
           <tr>
@@ -66,19 +26,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>3333333</td>
-            <td>Fulano da Silva Souza Dos Santos Oliveira</td>
-            <td>114.114.114-14</td>
-            <td>1.0</td>
-          </tr>
+          <!-- Procuradores serão inseridos aqui via JS -->
         </tbody>
       </table>
     </div>
   </div>
 
   <script src="../assets/js/layout.js"></script>
-  
+  <script type="module">
+    import { validarToken } from "../assets/js/auth.js";
+    import { carregarProcuradores } from "../assets/js/procuradores.js";
+
+    await validarToken();           // 🔒 Valida token primeiro
+    await carregarProcuradores();  // ✅ Se passou, carrega os dados
+  </script>
   <script src="../assets/js/logout.js"></script>
 </body>
 </html>
