@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - UHscope</title>
+  <link rel="stylesheet" href="../assets/css/home.css">
+</head>
+<body>
+  <script>
+        const token = localStorage.getItem("token");
+        if (!token) {
+            // Se não houver token, redireciona pro login
+            window.location.href = "../pages/login.html";
+        }
+  </script>
+  <div id="sidebar-container"></div>
+  <div class="main">
+    <div id="topbar-container"></div>
+
+    <div class="content">
+      <h2>Procuradores</h2>
+
+      <div class="buttons">
+        <button>Gerar Arquivo</button>
+        <button>Adicionar</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Matrícula</th>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>UH</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>3333333</td>
+            <td>Fulano da Silva Souza Dos Santos Oliveira</td>
+            <td>114.114.114-14</td>
+            <td>1.0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="../assets/js/layout.js"></script>
+  
+  <script src="../assets/js/logout.js"></script>
+</body>
+</html>

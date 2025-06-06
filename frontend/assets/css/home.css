@@ -1,0 +1,112 @@
+ * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    /* Menu lateral */
+    .sidebar {
+        height: 100vh; /* ← isso garante que ela pegue toda a altura da viewport */
+        width: 200px;
+        background-color: #333;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        padding-top: 20px;
+        position: fixed; /* fixa na lateral */
+        top: 0;
+        left: 0;
+     }
+
+    .sidebar h1 {
+      font-size: 18px;
+      text-align: center;
+      background-color: #333;
+      padding: 10px 0;
+    }
+
+    .sidebar a {
+      padding: 15px 20px;
+      text-decoration: none;
+      color: white;
+      display: block;
+    }
+
+    .sidebar a:hover {
+      background-color: #444;
+    }
+
+    /* Área principal */
+    .main {
+        margin-left: 200px; /* mesma largura da sidebar */
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: auto;
+    }
+
+    .topbar {
+      background-color: #2980b9;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #logout {
+        cursor: pointer;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .content h2 {
+      margin-bottom: 20px;
+    }
+
+    .buttons {
+      margin-bottom: 20px;
+    }
+
+    .buttons button {
+      padding: 10px 15px;
+      margin-right: 10px;
+      border: none;
+      background-color: white;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+
+    .buttons button:hover {
+      background-color: #eee;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }

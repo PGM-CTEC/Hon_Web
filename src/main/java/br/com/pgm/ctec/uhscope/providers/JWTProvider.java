@@ -5,7 +5,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
-
 @Service
 public class JWTProvider {
        
@@ -24,6 +23,5 @@ public class JWTProvider {
             System.out.println(e.getMessage());
             return null;
         }
-       
     }
 }

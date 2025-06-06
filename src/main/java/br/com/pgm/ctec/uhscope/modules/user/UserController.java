@@ -1,4 +1,6 @@
 package br.com.pgm.ctec.uhscope.modules.user;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +34,8 @@ public class UserController {
     {
         try{
             String token = this.userService.login(loginDTO.getUsername(), loginDTO.getPassword());
-            return ResponseEntity.status(HttpStatus.OK).body(token);
+            // return ResponseEntity.status(HttpStatus.OK).body(token);
+            return ResponseEntity.ok(Map.of("token", token));
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
