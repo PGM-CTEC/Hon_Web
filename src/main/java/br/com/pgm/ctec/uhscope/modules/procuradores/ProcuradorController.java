@@ -31,6 +31,12 @@ public class ProcuradorController {
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
+    @GetMapping("/{matricula}")
+     public ResponseEntity<ProcuradorEntity> getOne(@PathVariable String matricula){
+        ProcuradorEntity procurador = this.procuradorService.getOne(matricula);
+        return ResponseEntity.status(HttpStatus.OK).body(procurador);
+    }
+
     @PostMapping()
     public ResponseEntity<?> create(@Valid @RequestBody CreateProcuradorDTO createProcuradorDTO) {
         try {
@@ -66,8 +72,6 @@ public class ProcuradorController {
         catch(ProcuradorNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } 
-        
-        
     }
 }
 

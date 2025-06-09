@@ -29,6 +29,11 @@ public class ProcuradorService  {
         return list;
     }
 
+     public ProcuradorEntity getOne(String matricula) { 
+        ProcuradorEntity procurador = this.procuradorRepository.findByMatricula(matricula);
+        return procurador;
+    }
+
     public ProcuradorEntity create(CreateProcuradorDTO createProcuradorDTO) throws ValidationException {
         String cpfFormatted = createProcuradorDTO.getCpf().replace(".", "").replace("-", "");
     
