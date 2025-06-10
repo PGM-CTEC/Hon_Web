@@ -118,3 +118,12 @@
     .link-nome:hover {
     text-decoration: brown;
     }
+
+    .detalhes-procurador {
+      text-decoration:none;
+      color:black;
+    }
+    
+    .detalhes-procurador:hover {
+      color: #545454;
+    }

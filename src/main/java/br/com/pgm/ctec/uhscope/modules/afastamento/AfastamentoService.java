@@ -78,7 +78,6 @@ public class AfastamentoService {
 
     public ArrayList<AfastamentoEntity> getAll(String matricula){
         ArrayList<AfastamentoEntity> afastamentos = this.afastamentoRepository.getByProcurador_matricula(matricula);
-
         return afastamentos;
 
     }

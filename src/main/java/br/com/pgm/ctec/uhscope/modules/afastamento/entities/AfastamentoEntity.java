@@ -35,6 +35,9 @@ public class AfastamentoEntity {
     @Column(name = "uh_afastamento", nullable = false)
     private double uhAfastamento;
 
+    @Column(name = "tipo")
+    private String tipo; 
+
     @ManyToOne
     @JsonIgnore 
     @JoinColumn(name = "procurador_matricula", nullable = false) 
