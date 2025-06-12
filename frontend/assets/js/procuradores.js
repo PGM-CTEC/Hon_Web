@@ -104,7 +104,9 @@ export async function carregarProcuradores() {
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `relatorio_${mes}_${ano}.csv`;
+            //HON CARGA NO ERGON
+            meses = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"]
+            link.download = `HON CARGA NO ERGON ${meses[mes-1]} ${ano}.csv`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
