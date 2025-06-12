@@ -29,6 +29,11 @@ public class AfastamentoService {
     public AfastamentoEntity create(CreateAfastamentoDTO createAfastamentoDTO, String matricula) throws ValidationException {
         AfastamentoEntity afastamento = new AfastamentoEntity();
 
+        if (!createAfastamentoDTO.getTipo().equals("ATIVO") && !createAfastamentoDTO.getTipo().equals("INATIVO")) {
+            throw new ValidationException("Tipo de afastamento inválido");
+        }
+
+
         LocalDate dataInicioConverted = methodsUtils.convertDate(createAfastamentoDTO.getDataInicio());
         LocalDate dataFimConverted = methodsUtils.convertDate(createAfastamentoDTO.getDataFim());
 
@@ -72,6 +77,7 @@ public class AfastamentoService {
         afastamento.setDataFim(dataFimConverted);
         afastamento.setUhAfastamento(anosDeDiferenca);
         afastamento.setProcurador(procurador); // Definir o procurador
+        afastamento.setTipo(createAfastamentoDTO.getTipo());
 
         return this.afastamentoRepository.save(afastamento);
     }

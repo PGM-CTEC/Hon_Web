@@ -61,7 +61,7 @@ public class UserService {
  
         Algorithm algorithm = Algorithm.HMAC256(secret);
         String token = JWT.create().withIssuer("pgm")
-        .withExpiresAt(Instant.now().plus(Duration.ofMinutes(5)))
+        .withExpiresAt(Instant.now().plus(Duration.ofHours(5)))
         .withSubject(user.getCpf())
         .sign(algorithm);
         return token;

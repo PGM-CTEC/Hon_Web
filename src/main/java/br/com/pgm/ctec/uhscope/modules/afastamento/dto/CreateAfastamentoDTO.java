@@ -10,5 +10,8 @@ public class CreateAfastamentoDTO {
     
     @NotNull(message = "A data de fim do afastamento é obrigatória")
     private String dataFim;
+
+    @NotNull(message = "O tipo do afastamento é obrigatório")
+    private String tipo;
      
 }
