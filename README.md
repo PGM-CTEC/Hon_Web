@@ -69,8 +69,10 @@ Pronto, agora é possível usar a aplicação com o frontend consumindo a API.
 
 ![image](https://github.com/user-attachments/assets/7e9a25a8-064e-4370-8ff1-92449a22bd3b)
 
-## Adendo:
-A aplicação ainda está em desenvolvimento
+## Informações adicionais:
+1) A aplicação ainda está em desenvolvimento
+
+2) A Branch mais atualizada é a "frontend"
 
 
 
