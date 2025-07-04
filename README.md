@@ -1,8 +1,16 @@
-### Api de Gerenciamento de Honorários Advocatícios de Procuradores da PGM-RJ
+## Api de Gerenciamento de Honorários Advocatícios de Procuradores da PGM-RJ
+
+### Antes de mais nada, é necessário clonar o repositório para o seu repositório local, através do seguinte comando no diretório que você deseja:
+
+```
+git clone https://github.com/PGM-CTEC/Hon_Web.git
+```
+
+Logo em seguida vá até o diretório raiz onde o repositório foi clonado e abra ele no VSCode.
 
 ## 1) application.properties 
 
-Antes de mais nada, configure o arquivo application.properties e certifique-se de que seu banco de dados está devidamente configurado e rodando.
+Agora configure o arquivo application.properties e certifique-se de que seu banco de dados está devidamente configurado e rodando.
 ```
 spring.application.name=uhscope
 
@@ -27,7 +35,7 @@ security.token.secret="Insira uma chave secreta aqui"
 ## 2) Como rodar (VSCODE)
 
 2.1) 
-Vá até o diretória raiz e rode o seguinte comando no terminal:
+Vá até o diretório raiz e rode o seguinte comando no terminal:
 ```
 mvn spring-boot:run
 ```
